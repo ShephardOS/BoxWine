@@ -12,7 +12,7 @@ mkdir -p $HOME/boxwine
 cd $HOME/boxwine
 
 # Скачивание BoxWine
-curl -L -o boxwine.tar.gz https://github.com/ShephardOS/BoxWine/releases/latest/download/boxwine.tar.gz
+curl -L -o boxwine.tar.gz "URL" || { echo "Ошибка скачивания"; exit 1; } https://github.com/ShephardOS/BoxWine/releases/latest/download/boxwine.tar.gz
 
 # Распаковка и удаление архива
 tar -xvf boxwine.tar.gz
