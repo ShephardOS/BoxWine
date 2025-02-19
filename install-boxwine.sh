@@ -1,26 +1,21 @@
-#!/data/data/com.termux/files/usr/bin/bash
 
-# Обновление и установка зависимостей
-pkg update -y
-pkg upgrade -y
-pkg install x11-repo -y
-pkg install tur-repo -y
-pkg install box64 box86 wine xwayland curl -y
+# Установка box86 и box64 вручную (если они нужны)
+if [ ! -d $HOME/box64 ]; then
+    git clone https://github.com/ptitSeb/box64.git $HOME/box64
+    cd $HOME/box64
+    mkdir -p build && cd build
+    cmake -B build -S .. -DCMAKE_INSTALL_PREFIX=$PREFIX
+    make clean
+    make -j$(nproc)
+    make install
+fi
 
-# Создание рабочего каталога
-mkdir -p $HOME/boxwine
-cd $HOME/boxwine
-
-# Скачивание BoxWine
-curl -L -o boxwine.tar.gz "URL" || { echo "Ошибка скачивания"; exit 1; } https://github.com/ShephardOS/BoxWine/releases/latest/download/boxwine.tar.gz
-
-# Распаковка и удаление архива
-tar -xvf boxwine.tar.gz
-rm boxwine.tar.gz
-
-# Запуск X11-сервера
-export DISPLAY=:0
-termux-x11 :0 &
-
-# Запуск BoxWine
-./boxwine
+if [ ! -d $HOME/box86 ]; then
+    git clone https://github.com/ptitSeb/box86.git $HOME/box86
+    cd $HOME/box86
+    mkdir -p build && cd build
+    cmake -B build -S .. -DCMAKE_INSTALL_PREFIX=$PREFIX
+    make clean
+    make -j$(nproc)
+    make install
+fi
