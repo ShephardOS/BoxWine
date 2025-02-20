@@ -1,14 +1,33 @@
-# BoxWine  
+ # 🏆 BoxWine — эмулятор для PC-игр в Termux
 
-Эмулятор ПК для Android в Termux с поддержкой **DXVK, Box64, Box86, Wine** и **Termux-X11**.  
-Позволяет запускать Windows-приложения и работать с графическим интерфейсом.  
+BoxWine — это эмулятор, который позволяет запускать PC-игры на Android через Termux.  
+Он поддерживает **DXVK, Box86, Box64, Wine и Turnip** для лучшей совместимости.
 
-## 📥 Установка Termux и Termux-X11  
-[![📲 Установить Termux](https://img.shields.io/badge/📲%20Установить-Termux-green?style=for-the-badge)](https://f-droid.org/packages/com.termux/)  
-[![📲 Установить Termux-X11](https://img.shields.io/badge/📲%20Установить-Termux--X11-blue?style=for-the-badge)](https://github.com/termux/termux-x11/releases)  
+---
 
-## 🚀 Установка BoxWine  
+## 🚀 Возможности
+✔ Поддержка **DirectX и Vulkan** через DXVK  
+✔ Эмуляция **x86 и x86_64** на ARM через Box86 и Box64  
+✔ Работа с **Wine и Turnip** для запуска Windows-программ  
+✔ Запуск через **Termux X11** (графический интерфейс)  
+
+---
+
+## 📥 Установка (Termux)
+
+Сначала установите **Termux** и **Termux X11**:  
+- 📥 **Termux**: [Скачать Termux (F-Droid)](https://f-droid.org/en/packages/com.termux/)  
+- 📥 **Termux X11**: [Скачать Termux X11 (GitHub)](https://github.com/termux/x11-packages)  
+
+### 🔹 **Шаг 1: Установка BoxWine**
+```sh
 curl -sSL https://raw.githubusercontent.com/ShephardOS/BoxWine/main/install-boxwine.sh | bash
+
+🔹 Шаг 2: Запуск BoxWine
+После завершения установки введите команду:
+boxwine
+🚀 Это запустит рабочий стол в Termux X11!
+
 
 
 
