@@ -1,38 +1,36 @@
-#!/data/data/com.termux/files/usr/bin/bash
+#!/bin/bash
 
-# 1. Обновление пакетов и установка curl
-pkg update -y && pkg install -y curl
+Обновление пакетов
 
-# 2. Установка необходимых пакетов для X11
-pkg install -y xwayland termux-x11-nightly feh
+apt update && apt upgrade -y
 
-# 3. Скачивание BoxWine
-curl -o $HOME/install-boxwine.sh https://raw.githubusercontent.com/ShephardOS/BoxWine/main/install-boxwine.sh
+Установка зависимостей
 
-# 4. Делаем скрипт исполняемым
-chmod +x $HOME/install-boxwine.sh
+apt install -y x11-repo apt install -y pulseaudio termux-x11-nightly
 
-# 5. Запуск install-boxwine.sh
-bash $HOME/install-boxwine.sh
+Установка Box64 и Box86
 
-# 6. Скачивание обоев
-mkdir -p $HOME/.config/boxwine
-curl -o $HOME/.config/boxwine/background.jpg https://raw.githubusercontent.com/ShephardOS/BoxWine/main/background.jpg
+apt install -y box64 box86
 
-# 7. Создание команды "boxwine"
-cat <<EOF > $PREFIX/bin/boxwine
-#!/data/data/com.termux/files/usr/bin/bash
-export DISPLAY=:0
-termux-x11 :0 &
-sleep 2
-feh --bg-scale \$HOME/.config/boxwine/background.jpg
-cd \$HOME/boxwine && ./BoxWine
-EOF
+Установка Wine
 
-# 8. Делаем команду исполняемой
-chmod +x $PREFIX/bin/boxwine
+apt install -y wine
 
-echo "✅ Установка завершена! Введите 'boxwine' для запуска рабочего стола в Termux X11."
+Установка DXVK
+
+apt install -y dxvk
+
+Установка Turnip
+
+apt install -y mesa-vulkan-drivers
+
+Создание команды для запуска
+
+cat <<EOF > /data/data/com.termux/files/usr/bin/boxwine #!/bin/bash export DISPLAY=:1 pulseaudio --start startx & wine EOF chmod +x /data/data/com.termux/files/usr/bin/boxwine
+
+echo "Установка завершена! Запустите эмулятор командой: boxwine"
+
+
 
 
 
