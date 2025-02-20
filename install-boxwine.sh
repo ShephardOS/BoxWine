@@ -1,60 +1,44 @@
-#!/bin/bash
+#!/bin/bash set -e
 
-# Обновление и установка необходимых пакетов
-apt update -y && apt upgrade -y
-apt install -y git proot wget build-essential cmake ninja
+Устанавливаем зависимости
 
-# Клонирование репозитория с исходным кодом
-if [ ! -d "$HOME/BoxWine" ]; then
-    git clone https://github.com/ShephardOS/BoxWine.git "$HOME/BoxWine"
-fi
+pkg update && pkg upgrade -y pkg install -y git cmake clang python binutils x11-repo pkg install -y wine xwayland pulseaudio termux-x11-nightly
 
-cd "$HOME/BoxWine"
+Папка для установки
 
-# Установка Box64
-if [ ! -d "$HOME/box64" ]; then
-    git clone https://github.com/ptitSeb/box64.git "$HOME/box64"
-    cd "$HOME/box64"
-    mkdir build && cd build
-    cmake .. -DCMAKE_BUILD_TYPE=RelWithDebInfo
-    make -j$(nproc)
-    make install
-fi
+mkdir -p ~/boxwine && cd ~/boxwine
 
-# Установка Box86
-if [ ! -d "$HOME/box86" ]; then
-    git clone https://github.com/ptitSeb/box86.git "$HOME/box86"
-    cd "$HOME/box86"
-    mkdir build && cd build
-    cmake .. -DCMAKE_BUILD_TYPE=RelWithDebInfo
-    make -j$(nproc)
-    make install
-fi
+Клонируем репозитории
 
-# Установка Wine
-if [ ! -d "$HOME/wine" ]; then
-    git clone https://github.com/wine-mirror/wine.git "$HOME/wine"
-    cd "$HOME/wine"
-    ./configure
-    make -j$(nproc)
-    make install
-fi
+[ ! -d "BoxWine" ] && git clone --depth=1 https://github.com/ptitSeb/BoxWine.git [ ! -d "box64" ] && git clone --depth=1 https://github.com/ptitSeb/box64.git [ ! -d "box86" ] && git clone --depth=1 https://github.com/ptitSeb/box86.git [ ! -d "dxvk" ] && git clone --depth=1 https://github.com/doitsujin/dxvk.git [ ! -d "wine" ] && git clone --depth=1 https://github.com/wine-mirror/wine.git
 
-# Установка DXVK
-if [ ! -d "$HOME/dxvk" ]; then
-    git clone https://github.com/doitsujin/dxvk.git "$HOME/dxvk"
-    cd "$HOME/dxvk"
-    ./package-release.sh master /dxvk --no-package
-    cp -r /dxvk/x64/* /usr/lib/wine
-    cp -r /dxvk/x32/* /usr/lib32/wine
-fi
+Компиляция и установка BoxWine
 
-# Создание команды для запуска BoxWine
-echo '#!/bin/bash' > $HOME/boxwine.sh
-echo 'proot -0 -w /home $HOME/BoxWine/boxwine' >> $HOME/boxwine.sh
-chmod +x $HOME/boxwine.sh
+cd ~/boxwine/BoxWine mkdir -p build && cd build cmake .. make -j$(nproc) make install
 
-echo "Установка завершена! Запустите BoxWine с помощью команды ./boxwine.sh"
+Компиляция и установка Box64
+
+cd ~/boxwine/box64 mkdir -p build && cd build cmake .. make -j$(nproc) make install
+
+Компиляция и установка Box86
+
+cd ~/boxwine/box86 mkdir -p build && cd build cmake .. make -j$(nproc) make install
+
+Компиляция и установка DXVK
+
+cd ~/boxwine/dxvk ./package-release.sh master ~/boxwine/dxvk-build --no-package
+
+Устанавливаем Wine
+
+cd ~/boxwine/wine ./configure --enable-win64 make -j$(nproc) make install
+
+Создаём команду для запуска BoxWine
+
+cat << EOF > /data/data/com.termux/files/usr/bin/boxwine #!/bin/bash export DISPLAY=:1 export PULSE_SERVER=127.0.0.1 termux-x11 :1 & pulseaudio --start exec ~/boxwine/BoxWine/build/boxwine EOF chmod +x /data/data/com.termux/files/usr/bin/boxwine
+
+echo "Установка завершена! Запускайте BoxWine командой: boxwine"
+
+
 
 
 
