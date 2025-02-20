@@ -1,34 +1,26 @@
 #!/bin/bash
 
-Обновление пакетов
+Обновление и установка необходимых пакетов
 
-apt update && apt upgrade -y
+pkg update -y && pkg upgrade -y pkg install -y git wget proot tar
 
-Установка зависимостей
+Клонирование репозитория с исходным кодом
 
-apt install -y x11-repo apt install -y pulseaudio termux-x11-nightly
+if [ ! -d "$HOME/BoxWine" ]; then git clone https://github.com/ShephardOS/BoxWine.git $HOME/BoxWine fi
 
-Установка Box64 и Box86
+cd $HOME/BoxWine
 
-apt install -y box64 box86
+Установка Box64, Box86, Wine, DXVK
 
-Установка Wine
+bash install_box64.sh bash install_box86.sh bash install_wine.sh bash install_dxvk.sh
 
-apt install -y wine
+Создание команды для запуска BoxWine
 
-Установка DXVK
+echo "#!/bin/bash proot -0 -w /home ./BoxWine/start.sh" > $PREFIX/bin/boxwine chmod +x $PREFIX/bin/boxwine
 
-apt install -y dxvk
+echo "Установка завершена! Запустите BoxWine командой: boxwine"
 
-Установка Turnip
 
-apt install -y mesa-vulkan-drivers
-
-Создание команды для запуска
-
-cat <<EOF > /data/data/com.termux/files/usr/bin/boxwine #!/bin/bash export DISPLAY=:1 pulseaudio --start startx & wine EOF chmod +x /data/data/com.termux/files/usr/bin/boxwine
-
-echo "Установка завершена! Запустите эмулятор командой: boxwine"
 
 
 
