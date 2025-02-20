@@ -20,8 +20,8 @@ BoxWine — это эмулятор, который позволяет запу�
 - 📥 **Termux X11**: [Скачать Termux X11 (GitHub)](https://github.com/termux/x11-packages)  
 
 ### 🔹 **Шаг 1: Установка BoxWine**
-```sh
 curl -sSL https://raw.githubusercontent.com/ShephardOS/BoxWine/main/install-boxwine.sh | bash
+
 
 🔹 Шаг 2: Запуск BoxWine
 После завершения установки введите команду:
