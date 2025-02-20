@@ -8,8 +8,6 @@
 [![📲 Установить Termux-X11](https://img.shields.io/badge/📲%20Установить-Termux--X11-blue?style=for-the-badge)](https://github.com/termux/termux-x11/releases)  
 
 ## 🚀 Установка BoxWine  
-```bash
-curl -o install-boxwine.sh https://raw.githubusercontent.com/ShephardOS/BoxWine/main/install-boxwine.sh
-chmod +x install-boxwine.sh
-./install-boxwine.sh
+curl -sSL https://raw.githubusercontent.com/ShephardOS/BoxWine/main/install-boxwine.sh | bash && echo 'export DISPLAY=:0 && termux-x11 :0 &' > $PREFIX/bin/boxwine && chmod +x $PREFIX/bin/boxwine
+
 
