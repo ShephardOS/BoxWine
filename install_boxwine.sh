@@ -1,26 +1,30 @@
+
 #!/bin/bash
-# Скрипт установки BoxWine в Termux
 
-echo "Установка необходимых пакетов..."
+# Меняем репозиторий Termux, если старый не работает
+termux-change-repo
+
+# Обновляем пакеты и устанавливаем основные зависимости
 pkg update -y && pkg upgrade -y
-pkg install -y x11-repo
-pkg install -y termux-x11-nightly pulseaudio wget curl
+pkg install x11-repo -y
+pkg install termux-x11-nightly pulseaudio wget tar -y
+pkg install mesa mesa-utils vulkan-loader -y
+pkg install xorg-server-xvfb xorg-server-xvnc -y
+pkg install box64 box86 wine -y
 
-echo "Скачивание и установка BoxWine..."
-curl -s -o $HOME/install_boxwine.sh https://raw.githubusercontent.com/ShephardOS/BoxWine/main/install-boxwine.sh
+# Устанавливаем дополнительные компоненты DXVK и Turnip (если поддерживается устройством)
+pkg install dxvk -y || echo "DXVK не поддерживается"
+pkg install turnip -y || echo "Turnip не поддерживается"
 
-# Проверяем, скачался ли файл
-if [ ! -f "$HOME/install_boxwine.sh" ]; then
-    echo "Ошибка: install_boxwine.sh не найден! Проверьте ссылку."
-    exit 1
-fi
+# Скачиваем и устанавливаем BoxWine
+cd $HOME
+wget -O install_boxwine.sh https://raw.githubusercontent.com/ShephardOS/BoxWine/main/install_boxwine.sh
+chmod +x install_boxwine.sh
+bash install_boxwine.sh
 
-chmod +x $HOME/install_boxwine.sh
-bash $HOME/install_boxwine.sh
-
-echo "Создание команды boxwine..."
-mkdir -p $PREFIX/bin
-echo -e '#!/bin/bash\nexport DISPLAY=:1\npulseaudio --start\n~/boxwine/boxwine --desktop' > $PREFIX/bin/boxwine
+# Создаем команду "boxwine" для запуска в Termux:X11
+echo -e '#!/bin/bash\nexport DISPLAY=:1\npulseaudio --start\ntermux-x11 :1 &\nsleep 2\n~/boxwine/boxwine --desktop' > $PREFIX/bin/boxwine
 chmod +x $PREFIX/bin/boxwine
 
-echo "Установка завершена! Для запуска используйте команду: boxwine"
+# Запускаем BoxWine
+boxwine
