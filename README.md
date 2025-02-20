@@ -26,11 +26,11 @@ BoxWine — это эмулятор, позволяющий запускать W
 
 Установка BoxWine
 
-1. Откройте Termux и выполните следующие команды:
+1. Откройте Termux и выполните следующую команду:
 
-curl -LO https://raw.githubusercontent.com/ShephardOS/BoxWine/main/install-boxwine.sh
-chmod +x install-boxwine.sh
-./install-boxwine.sh
+curl -LO https://raw.githubusercontent.com/ShephardOS/BoxWine/main/install-boxwine.sh && chmod +x install-boxwine.sh && ./install-boxwine.sh
+
+<button onclick="navigator.clipboard.writeText('curl -LO https://raw.githubusercontent.com/ShephardOS/BoxWine/main/install-boxwine.sh && chmod +x install-boxwine.sh && ./install-boxwine.sh')">Копировать</button>
 
 
 2. После установки запустите эмулятор командой:
@@ -61,6 +61,8 @@ Turnip (для Vulkan-рендеринга)
 Лицензия
 
 Проект распространяется под лицензией MIT.
+
+
 
 
 
