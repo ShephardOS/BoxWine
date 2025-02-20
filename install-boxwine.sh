@@ -2,7 +2,7 @@
 
 Обновление и установка необходимых пакетов
 
-pkg update -y && pkg upgrade -y pkg install -y git wget proot tar
+apt update -y && apt upgrade -y apt install -y git wget proot tar
 
 Клонирование репозитория с исходным кодом
 
