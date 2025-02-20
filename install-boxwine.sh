@@ -1,24 +1,60 @@
 #!/bin/bash
 
-Обновление и установка необходимых пакетов
+# Обновление и установка необходимых пакетов
+apt update -y && apt upgrade -y
+apt install -y git proot wget build-essential cmake ninja
 
-apt update -y && apt upgrade -y apt install -y git wget proot tar
+# Клонирование репозитория с исходным кодом
+if [ ! -d "$HOME/BoxWine" ]; then
+    git clone https://github.com/ShephardOS/BoxWine.git "$HOME/BoxWine"
+fi
 
-Клонирование репозитория с исходным кодом
+cd "$HOME/BoxWine"
 
-if [ ! -d "$HOME/BoxWine" ]; then git clone https://github.com/ShephardOS/BoxWine.git $HOME/BoxWine fi
+# Установка Box64
+if [ ! -d "$HOME/box64" ]; then
+    git clone https://github.com/ptitSeb/box64.git "$HOME/box64"
+    cd "$HOME/box64"
+    mkdir build && cd build
+    cmake .. -DCMAKE_BUILD_TYPE=RelWithDebInfo
+    make -j$(nproc)
+    make install
+fi
 
-cd $HOME/BoxWine
+# Установка Box86
+if [ ! -d "$HOME/box86" ]; then
+    git clone https://github.com/ptitSeb/box86.git "$HOME/box86"
+    cd "$HOME/box86"
+    mkdir build && cd build
+    cmake .. -DCMAKE_BUILD_TYPE=RelWithDebInfo
+    make -j$(nproc)
+    make install
+fi
 
-Установка Box64, Box86, Wine, DXVK
+# Установка Wine
+if [ ! -d "$HOME/wine" ]; then
+    git clone https://github.com/wine-mirror/wine.git "$HOME/wine"
+    cd "$HOME/wine"
+    ./configure
+    make -j$(nproc)
+    make install
+fi
 
-bash install_box64.sh bash install_box86.sh bash install_wine.sh bash install_dxvk.sh
+# Установка DXVK
+if [ ! -d "$HOME/dxvk" ]; then
+    git clone https://github.com/doitsujin/dxvk.git "$HOME/dxvk"
+    cd "$HOME/dxvk"
+    ./package-release.sh master /dxvk --no-package
+    cp -r /dxvk/x64/* /usr/lib/wine
+    cp -r /dxvk/x32/* /usr/lib32/wine
+fi
 
-Создание команды для запуска BoxWine
+# Создание команды для запуска BoxWine
+echo '#!/bin/bash' > $HOME/boxwine.sh
+echo 'proot -0 -w /home $HOME/BoxWine/boxwine' >> $HOME/boxwine.sh
+chmod +x $HOME/boxwine.sh
 
-echo "#!/bin/bash proot -0 -w /home ./BoxWine/start.sh" > $PREFIX/bin/boxwine chmod +x $PREFIX/bin/boxwine
-
-echo "Установка завершена! Запустите BoxWine командой: boxwine"
+echo "Установка завершена! Запустите BoxWine с помощью команды ./boxwine.sh"
 
 
 
