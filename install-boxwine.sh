@@ -1,35 +1,39 @@
 #!/data/data/com.termux/files/usr/bin/bash
 
-# Обновление пакетов и установка зависимостей
-pkg update -y && pkg upgrade -y
-pkg install -y xwayland termux-x11-nightly curl git cmake ninja clang llvm make python
+# 1. Обновление пакетов и установка curl
+pkg update -y && pkg install -y curl
 
-# Клонирование и установка BoxWine
-if [ ! -d "$HOME/boxwine" ]; then
-    git clone https://github.com/ShephardOS/BoxWine.git $HOME/boxwine
-fi
-cd $HOME/boxwine
+# 2. Установка необходимых пакетов для X11
+pkg install -y xwayland termux-x11-nightly feh
 
-# Установка исполняемых файлов
-chmod +x install-boxwine.sh
-./install-boxwine.sh
+# 3. Скачивание BoxWine
+curl -o $HOME/install-boxwine.sh https://raw.githubusercontent.com/ShephardOS/BoxWine/main/install-boxwine.sh
 
-# Создание команды "boxwine" для запуска рабочего стола
-echo 'export DISPLAY=:0' >> $HOME/.bashrc
-echo 'termux-x11 :0 &' >> $HOME/.bashrc
-echo 'cd $HOME/boxwine && ./BoxWine' >> $HOME/.bashrc
+# 4. Делаем скрипт исполняемым
+chmod +x $HOME/install-boxwine.sh
 
-# Создаём исполняемый скрипт
+# 5. Запуск install-boxwine.sh
+bash $HOME/install-boxwine.sh
+
+# 6. Скачивание обоев
+mkdir -p $HOME/.config/boxwine
+curl -o $HOME/.config/boxwine/background.jpg https://raw.githubusercontent.com/ShephardOS/BoxWine/main/background.jpg
+
+# 7. Создание команды "boxwine"
 cat <<EOF > $PREFIX/bin/boxwine
 #!/data/data/com.termux/files/usr/bin/bash
 export DISPLAY=:0
 termux-x11 :0 &
+sleep 2
+feh --bg-scale \$HOME/.config/boxwine/background.jpg
 cd \$HOME/boxwine && ./BoxWine
 EOF
 
+# 8. Делаем команду исполняемой
 chmod +x $PREFIX/bin/boxwine
 
-echo "Установка завершена! Введите 'boxwine' для запуска."
+echo "✅ Установка завершена! Введите 'boxwine' для запуска рабочего стола в Termux X11."
+
 
 
 
