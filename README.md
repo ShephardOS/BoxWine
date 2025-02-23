@@ -1,52 +1,44 @@
 
-BoxWine Installer for Android (Termux)
+# BoxWine
 
-Описание
+BoxWine — это эмулятор для запуска Windows-программ и игр на устройствах Android с использованием Wine. Он позволяет создать рабочий стол Windows в **Termux** с использованием **Termux:X11** и других необходимых инструментов для эмуляции.
 
-Этот скрипт позволяет установить эмулятор BoxWine на Android через Termux и создать удобную команду для его запуска.
+## Особенности
 
-Установка
+- Поддержка Wine для запуска Windows-программ.
+- Простая установка с использованием `curl` в **Termux**.
+- Запуск Windows-программ в **Termux** с X11 для графического интерфейса.
+- Использование PulseAudio для звука.
+- Поддержка архитектур **ARM** и **x86**.
+- Легкость в установке и настройке.
 
-Откройте Termux и выполните следующую команду:
+## Установка
 
-curl -s -o ~/install_boxwine.sh https://raw.githubusercontent.com/boxwine/boxwine/main/install && chmod +x ~/install_boxwine.sh && ~/install_boxwine.sh
+### 1. Установите **Termux**
 
-Создание команды boxwine
+Скачайте и установите **Termux**:
 
-После установки выполните:
+- Для устройств Android: загрузите **Termux** из [Google Play Store](https://play.google.com/store/apps/details?id=com.termux) или [F-Droid](https://f-droid.org/packages/com.termux/).
 
-echo 'cd ~/boxwine && ./boxwine' > ~/bin/boxwine && chmod +x ~/bin/boxwine
+### 2. Установите **Termux:X11**
 
-Теперь можно запускать эмулятор просто введя:
+Для запуска графического интерфейса, вам потребуется **Termux:X11**:
 
-boxwine
+- Установите **Termux:X11** из репозитория F-Droid: [Termux-X11 на F-Droid](https://f-droid.org/packages/com.termux.x11/).
 
-Автозапуск рабочего стола
+### 3. Установите **InputBridge** для взаимодействия с графическим интерфейсом
 
-Если требуется сразу запускать рабочий стол BoxWine, используйте:
+Чтобы корректно работать с графическим интерфейсом через **Termux**, установите **InputBridge**:
 
-echo 'cd ~/boxwine && ./boxwine --desktop' > ~/bin/boxwine && chmod +x ~/bin/boxwine
+- Загрузите и установите **InputBridge** с помощью этого [ссылки](https://github.com/Termux-Tools/InputBridge) или через [F-Droid](https://f-droid.org/packages/com.termux.inputbridge/).
 
-Требования
+### 4. Установите **curl** в **Termux**
 
-Android 10+
+**curl** будет использоваться для загрузки и установки **BoxWine**. Для установки выполните команду:
 
-Termux (установите с F-Droid)
-
-Termux: X11 (если нужен GUI, установите с F-Droid)
-
-
-Дополнительно
-
-Для управления можно использовать Input Bridge или подключать геймпады через Xinput Bridge.
-
-
----
-
-Источник
-
-Официальный репозиторий BoxWine: GitHub
-
+```bash
+pkg update && pkg upgrade -y
+pkg install curl -y
 
 
 
