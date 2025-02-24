@@ -34,7 +34,7 @@ pkg install hashdeep -y &>/dev/null
 pkg install termux-x11-nightly -y &>/dev/null
 
 if [ -e $PREFIX/glibc ]; then
-    echo -n "Removing previous glibc. Continue? (Y/n) "
+    echo -n 
     read i
     if [ "$i" = "Y" ] || [ "$i" = "y" ]; then
         rm -rf $PREFIX/glibc
