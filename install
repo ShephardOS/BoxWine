@@ -1,0 +1,97 @@
+#!/bin/bash
+
+echo "Removing old files..."
+rm -rf ~/x
+
+echo "Installing termux-am..."
+pkg install termux-am -y &>/dev/null
+
+termux-setup-storage & sleep 4 &>/dev/null
+
+while true; do
+    if [ -d ~/storage/shared ]; then
+        break
+    else
+        echo "Error: Storage access denied!"
+    fi
+    sleep 3
+done
+
+echo "Updating and installing required packages..."
+apt-get clean
+apt-get update >/dev/null 2>&1
+apt-get -y --with-new-pkgs -o Dpkg::Options::="--force-confdef" upgrade >/dev/null 2>&1
+pkg install -y x11-repo pulseaudio xwayland wget tsu root-repo patchelf p7zip xorg-xrandr ncurses-utils hashdeep termux-x11-nightly &>/dev/null
+
+echo "Cleaning previous installation..."
+if [ -e $PREFIX/boxwine ]; then
+    echo -n "Remove old BoxWine? (Y/n) "
+    read i
+    if [ "$i" = "Y" ] || [ "$i" = "y" ]; then
+        rm -rf $PREFIX/boxwine
+    else
+        exit 1
+    fi
+fi
+
+echo "Select installation option:"
+echo "1) BoxWine + Box86/Box64"
+echo "2) BoxWine + WoW64"
+echo -n "Your choice: "
+read choice
+
+INSTALL_WOW64=0
+case "$choice" in
+    1) INSTALL_WOW64=0 ;;
+    2) INSTALL_WOW64=1 ;;
+    *) echo "Error: Invalid selection!" && exit 1 ;;
+esac
+
+echo "Downloading and installing BoxWine..."
+mkdir -p $PREFIX/boxwine
+
+# Download BoxWine
+wget -q "https://github.com/ShephardOS/BoxWine/releases/latest/download/boxwine.tar.xz" -O $PREFIX/boxwine/boxwine.tar.xz
+tar -xf $PREFIX/boxwine/boxwine.tar.xz -C $PREFIX/boxwine
+rm $PREFIX/boxwine/boxwine.tar.xz
+
+echo "Downloading DXVK, Vulkan, Turnip, WineD3D, OpenGL..."
+mkdir -p $PREFIX/boxwine/drivers
+
+# DXVK
+wget -q "https://github.com/doitsujin/dxvk/releases/latest/download/dxvk.tar.gz" -O $PREFIX/boxwine/drivers/dxvk.tar.gz
+tar -xf $PREFIX/boxwine/drivers/dxvk.tar.gz -C $PREFIX/boxwine/drivers
+rm $PREFIX/boxwine/drivers/dxvk.tar.gz
+
+# Vulkan (Turnip)
+wget -q "https://github.com/KhronosGroup/Vulkan-Loader/releases/latest/download/vulkan-loader.tar.gz" -O $PREFIX/boxwine/drivers/vulkan.tar.gz
+tar -xf $PREFIX/boxwine/drivers/vulkan.tar.gz -C $PREFIX/boxwine/drivers
+rm $PREFIX/boxwine/drivers/vulkan.tar.gz
+
+# WineD3D
+wget -q "https://github.com/wine-mirror/wine/releases/latest/download/wined3d.tar.xz" -O $PREFIX/boxwine/drivers/wined3d.tar.xz
+tar -xf $PREFIX/boxwine/drivers/wined3d.tar.xz -C $PREFIX/boxwine/drivers
+rm $PREFIX/boxwine/drivers/wined3d.tar.xz
+
+# OpenGL
+wget -q "https://github.com/KhronosGroup/OpenGL-Registry/releases/latest/download/opengl.tar.gz" -O $PREFIX/boxwine/drivers/opengl.tar.gz
+tar -xf $PREFIX/boxwine/drivers/opengl.tar.gz -C $PREFIX/boxwine/drivers
+rm $PREFIX/boxwine/drivers/opengl.tar.gz
+
+echo "Installing Box86 and Box64..."
+pkg install -y box86 box64 &>/dev/null
+
+if [ "$INSTALL_WOW64" = "1" ]; then
+    echo "Installing WoW64..."
+    wget -q "https://github.com/wine-mirror/wine/releases/latest/download/wine-wow64.tar.xz" -O $PREFIX/boxwine/wine-wow64.tar.xz
+    tar -xf $PREFIX/boxwine/wine-wow64.tar.xz -C $PREFIX/boxwine
+    rm $PREFIX/boxwine/wine-wow64.tar.xz
+else
+    echo "Installing standard Wine..."
+    wget -q "https://github.com/wine-mirror/wine/releases/latest/download/wine.tar.xz" -O $PREFIX/boxwine/wine.tar.xz
+    tar -xf $PREFIX/boxwine/wine.tar.xz -C $PREFIX/boxwine
+    rm $PREFIX/boxwine/wine.tar.xz
+fi
+
+ln -sf $PREFIX/boxwine/boxwine $PREFIX/bin/boxwine
+echo "Installation complete! To start, type 'boxwine'."
