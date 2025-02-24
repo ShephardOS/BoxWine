@@ -1,42 +1,42 @@
-# BoxWine
 
-BoxWine is a PC emulator for Android running in Termux. It supports DXVK, Box86, Box64, Wine, and Termux-X11, allowing you to run Windows applications with a graphical interface on Android devices without root access.
+# BoxWine Installation Guide
 
-# Features
+This guide will help you install BoxWine along with its dependencies on your Android device.
 
-Run Windows applications on Android
+## Prerequisites
 
-Supports Termux-X11 for GUI applications
+Before installing BoxWine, ensure you have the following applications installed on your device:
 
-Compatible with DXVK, Box86, and Box64
+1. **Termux**: A terminal emulator for Android.
+2. **Termux:X11**: An add-on for Termux to provide X11 support.
+3. **InputBridge**: A tool to enhance input controls.
 
-No root required
+## Installation Steps
 
+### 1. Install Termux
 
-# Installation
+Download and install Termux from F-Droid:
 
-1. Install Prerequisites
-Make sure the following apps are installed on your device:
+[![Termux](https://f-droid.org/repo/com.termux/en/icon_7AxM2qJ.png)](https://f-droid.org/packages/com.termux/)
 
-Termux
+*Note: Ensure you download version 0.118.0.*
 
-Termux-X11
+### 2. Install Termux:X11
 
-Input Bridge
+Download and install Termux:X11 from F-Droid:
 
+[![Termux:X11](https://f-droid.org/repo/com.termux.x11/en/icon.png)](https://f-droid.org/packages/com.termux.x11/)
 
+### 3. Install InputBridge
 
-2. Install BoxWine
-Open Termux and run the command below to install BoxWine automatically:
+Download and install InputBridge:
 
-curl -s -o ~/install.sh https://raw.githubusercontent.com/ShephardOS/BoxWine/main/install.sh && chmod +x ~/install.sh && ~/install.sh
+[![InputBridge](https://github.com/HorizonEmuTeam/Horizon-Emu/raw/main/InputBridge_v0.1.9.9.apk)](https://github.com/HorizonEmuTeam/Horizon-Emu/blob/main/InputBridge_v0.1.9.9.apk)
 
+### 4. Install BoxWine
 
+After installing the above applications, open Termux and execute the following command to install BoxWine:
 
-
-
-
-
-
-
+```bash
+curl -s -o ~/x https://raw.githubusercontent.com/ShephardOS/BoxWine/main/install
 
