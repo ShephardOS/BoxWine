@@ -47,7 +47,7 @@ INSTALL_WOW64=0
 
 echo "Select an option"
 echo "1) Install previous boxwine with box86"
-echo "2) Install new mobox wow64 version"
+echo "2) Install new boxwine wow64 version"
 echo ""
 echo -n "Selected number: "
 read i
