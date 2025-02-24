@@ -54,7 +54,7 @@ if [ -e $PREFIX/glibc ]; then
     fi
 fi
 
-echo "Installing BoxWine"
+echo "Installing boxwine"
 
 function wget-git-q {
     wget -q --retry-connrefused --tries=0 --header "PRIVATE-TOKEN: $PRIVATE_TOKEN" "https://gitlab.com/api/v4/projects/$PROJECT_ID/repository/files/$1/raw?ref=main" -O $2
@@ -78,5 +78,5 @@ sync-all
 sync-package wine-9.3-vanilla-wow64
 
 ln -sf $PREFIX/glibc/opt/scripts/BoxWine $PREFIX/bin/BoxWine
-echo "To start - type \"BoxWine\""
+echo "To start - type \"boxwine"\""
 
