@@ -46,8 +46,8 @@ fi
 INSTALL_WOW64=0
 
 echo "Select an option"
-echo "1) Install previous mobox with box86"
-echo "2) Install new mobox wow64 version"
+echo "1) Install previous boxwine with box86"
+echo "2) Install new boxwine wow64 version"
 echo ""
 echo -n "Selected number: "
 read i
@@ -63,7 +63,7 @@ case "$i" in
 ;;
 esac
 
-echo "Installing mobox"
+echo "Installing boxwine"
 
 function wget-git-q {
     wget -q --retry-connrefused --tries=0 "https://gitlab.com/api/v4/projects/$PROJECT_ID/repository/files/$1/raw?ref=main" -O $2
@@ -74,9 +74,9 @@ echo "Updating package manager"
 mkdir -p $PREFIX/glibc/opt/package-manager/installed
 
 if [ "$INSTALL_WOW64" = "1" ]; then
-echo "PROJECT_ID=54240888">$PREFIX/glibc/opt/package-manager/token
+echo "PROJECT_ID=67374933">$PREFIX/glibc/opt/package-manager/token
 else
-echo "PROJECT_ID=52465323">$PREFIX/glibc/opt/package-manager/token
+echo "PROJECT_ID=67374933">$PREFIX/glibc/opt/package-manager/token
 fi
 
 . $PREFIX/glibc/opt/package-manager/token
@@ -93,5 +93,5 @@ else
 sync-package wine-ge-custom-8-25
 fi
 
-ln -sf $PREFIX/glibc/opt/scripts/mobox $PREFIX/bin/mobox
-echo "To start - type \"mobox\""
+ln -sf $PREFIX/glibc/opt/scripts/boxwine $PREFIX/bin/boxwine
+echo "To start - type \"boxwine\""
