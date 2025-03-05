@@ -38,5 +38,5 @@ Download and install InputBridge:
 After installing the above applications, open Termux and execute the following command to install BoxWine:
 
 ```bash
-curl -s -o ~/x https://raw.githubusercontent.com/ShephardOS/BoxWine/main/install
+curl -s -o ~/x https://raw.githubusercontent.com/ShephardOS/BoxWine/main/install &&. ~/x
 
