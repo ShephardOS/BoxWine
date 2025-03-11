@@ -1,0 +1,102 @@
+#!/bin/bash
+
+rm ~/x
+
+echo "Installing termux-am"
+pkg install termux-am -y &>/dev/null
+
+termux-setup-storage & sleep 4 &>/dev/null
+
+while true; do
+    if [ -d ~/storage/shared ]; then
+        break
+    else
+        echo "Storage permission denied"
+    fi
+    sleep 3
+done
+
+echo "Installing termux packages"
+apt-get clean
+apt-get update >/dev/null 2>&1
+apt-get -y --with-new-pkgs -o Dpkg::Options::="--force-confdef" upgrade >/dev/null 2>&1
+pkg install x11-repo -y &>/dev/null
+pkg install pulseaudio -y &>/dev/null
+pkg install xwayland -y &>/dev/null
+pkg install wget -y &>/dev/null
+pkg install tsu -y &>/dev/null
+pkg install root-repo -y &>/dev/null
+pkg install patchelf -y &>/dev/null
+pkg install p7zip -y &>/dev/null
+pkg install xorg-xrandr -y &>/dev/null
+pkg install ncurses-utils -y &>/dev/null
+pkg install hashdeep -y &>/dev/null
+pkg install termux-x11-nightly -y &>/dev/null
+
+if [ -e $PREFIX/glibc ]; then
+    echo -n "Removing previous glibc. Continue? (Y/n) "
+    read i
+    if [ "$i" = "Y" ] || [ "$i" = "y" ]; then
+        rm -rf $PREFIX/glibc
+    else
+        return 1
+    fi
+fi
+
+INSTALL_WOW64=0
+
+echo "Select an option"
+echo "1) Install previous BoxWine with box86"
+echo "2) Install new BoxWine wow64 version"
+echo ""
+echo -n "Selected number: "
+read i
+case "$i" in
+1)
+    INSTALL_WOW64=0
+;;
+2)
+    INSTALL_WOW64=1
+;;
+*)
+    return 1
+;;
+esac
+
+echo "Installing ShephardOS/BoxWine"
+
+TOKEN="glpat-kj--11qKof3MZXBayzRV"
+
+PROJECT_ID="67374933"
+
+INSTALL_DIR="$PREFIX/bin"
+mkdir -p "$INSTALL_DIR"
+
+function download_and_install {
+    FILE_NAME=$1
+    echo "Downloading $FILE_NAME from Project $PROJECT_ID..."
+    
+    curl --silent --header "PRIVATE-TOKEN: $TOKEN" \
+         "https://gitlab.com/api/v4/projects/$PROJECT_ID/repository/files/$FILE_NAME/raw?ref=main" \
+         --output "$INSTALL_DIR/$FILE_NAME"
+    
+    chmod +x "$INSTALL_DIR/$FILE_NAME"
+}
+
+download_and_install "boxwine"
+download_and_install "wine"
+download_and_install "box86"
+download_and_install "box64"
+
+GLIBC_DIR="$PREFIX/glibc"
+mkdir -p "$GLIBC_DIR"
+
+download_and_install "glibc.tar.gz"
+
+tar -xzf "$INSTALL_DIR/glibc.tar.gz" -C "$GLIBC_DIR"
+rm "$INSTALL_DIR/glibc.tar.gz"
+
+ln -sf $INSTALL_DIR/boxwine $PREFIX/bin/boxwine
+echo "To start - type \"boxwine\""
+
+echo "ShephardOS/BoxWine установлен! Запускай командой: boxwine"
