@@ -1,0 +1,81 @@
+#!/bin/bash
+
+rm -f ~/x
+
+echo "Установка termux-am..."
+pkg install -y termux-am &>/dev/null
+
+termux-setup-storage & sleep 4 &>/dev/null
+
+while [ ! -d ~/storage/shared ]; do
+    echo "Доступ к хранилищу не предоставлен"
+    sleep 3
+done
+
+echo "Обновление пакетов Termux..."
+apt-get clean
+apt-get update &>/dev/null
+apt-get -y upgrade --with-new-pkgs -o Dpkg::Options::="--force-confdef" &>/dev/null
+
+echo "Установка зависимостей..."
+PACKAGES=(
+    x11-repo pulseaudio xwayland wget tsu root-repo patchelf
+    p7zip xorg-xrandr ncurses-utils hashdeep termux-x11-nightly
+)
+
+for pkg in "${PACKAGES[@]}"; do
+    pkg install -y "$pkg" &>/dev/null
+done
+
+if [ -d "$PREFIX/glibc" ]; then
+    read -p "Удалить предыдущий BoxWine? (Y/n) " i
+    [[ "$i" =~ ^[Yy]$ ]] && rm -rf "$PREFIX/glibc" || exit 1
+fi
+
+echo -e "Выбери версию BoxWine:\n1) BoxWine (box86)\n2) BoxWine (WoW64)"
+read -p "Выбор: " i
+
+case "$i" in
+    1) INSTALL_WOW64=0 ;;
+    2) INSTALL_WOW64=1 ;;
+    *) exit 1 ;;
+esac
+
+echo "Установка BoxWine..."
+
+function wget_boxwine {
+    wget -q --retry-connrefused --tries=0 \
+        "https://gitlab.com/api/v4/projects/$PROJECT_ID/repository/files/$1/raw?ref=main" \
+        -O "$2"
+}
+
+mkdir -p "$PREFIX/glibc/opt/package-manager/installed"
+
+if [ "$INSTALL_WOW64" -eq 1 ]; then
+    echo "PROJECT_ID=54240888" > "$PREFIX/glibc/opt/package-manager/token"
+else
+    echo "PROJECT_ID=52465323" > "$PREFIX/glibc/opt/package-manager/token"
+fi
+
+. "$PREFIX/glibc/opt/package-manager/token"
+
+if ! wget_boxwine "package-manager" "$PREFIX/glibc/opt/package-manager/package-manager"; then
+    echo "Ошибка загрузки менеджера пакетов."
+    exit 1
+fi
+
+source "$PREFIX/glibc/opt/package-manager/package-manager"
+sync-all
+
+if [ "$INSTALL_WOW64" -eq 1 ]; then
+    sync-package wine-9.3-vanilla-wow64
+else
+    sync-package wine-ge-custom-8-25
+fi
+
+ln -sf "$PREFIX/glibc/opt/scripts/boxwine" "$PREFIX/bin/boxwine"
+
+echo "Исправление меню..."
+sed -i 's/Switch to mobox/Switch to boxwine/g' "$PREFIX/glibc/opt/scripts/menu"
+
+echo "Установка завершена. Для запуска используй команду: boxwine"
