@@ -1,0 +1,60 @@
+#!/bin/bash
+
+termux-setup-storage &>/dev/null
+sleep 2
+
+while [ ! -d "$HOME/storage/shared" ]; do
+    echo "Please grant storage access in the prompt." 
+    sleep 3
+done
+
+echo "Installing Termux packages..."
+apt-get clean
+apt-get update >/dev/null 2>&1
+apt-get -y --with-new-pkgs -o Dpkg::Options::="--force-confdef" upgrade >/dev/null 2>&1
+
+pkg install x11-repo -y &>/dev/null
+pkg install pulseaudio -y &>/dev/null
+pkg install xwayland -y &>/dev/null
+pkg install wget -y &>/dev/null
+pkg install tsu -y &>/dev/null
+pkg install root-repo -y &>/dev/null
+pkg install patchelf -y &>/dev/null
+pkg install p7zip -y &>/dev/null
+pkg install xorg-xrandr -y &>/dev/null
+pkg install ncurses-utils -y &>/dev/null
+pkg install hashdeep -y &>/dev/null
+pkg install termux-x11-nightly -y &>/dev/null
+
+mkdir -p $PREFIX/glibc/opt/package-manager/installed
+
+echo "PRIVATE_TOKEN=glpat-9fxsdQ4Fub14JU8xMUot
+PROJECT_ID=67947913" > $PREFIX/glibc/opt/package-manager/token
+
+. $PREFIX/glibc/opt/package-manager/token
+
+function wget-git-q {
+    wget -q --retry-connrefused --tries=0 --header "PRIVATE-TOKEN: $PRIVATE_TOKEN" \
+    "https://gitlab.com/api/v4/projects/$PROJECT_ID/repository/files/$1/raw?ref=main" -O "$2"
+}
+
+if ! wget-git-q "package-manager" "$PREFIX/glibc/opt/package-manager/package-manager"; then
+    echo "Download failed."
+    exit 1
+fi
+
+. "$PREFIX/glibc/opt/package-manager/package-manager"
+sync-all
+sync-package wine-9.3-vanilla-wow64
+
+cat <<EOF > "$PREFIX/bin/boxwine"
+#!/bin/bash
+export DISPLAY=:0
+termux-x11 :0 &
+sleep 2
+wine64
+EOF
+
+chmod +x "$PREFIX/bin/boxwine"
+
+echo "Installation complete! To start, type 'boxwine'"
