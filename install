@@ -1,0 +1,67 @@
+#!/bin/bash
+
+echo "Select installation language / Выберите язык установки:"
+echo "1) English"
+echo "2) Русский"
+read -p "Choice / Выбор: " lang_choice
+
+if [ "$lang_choice" == "2" ]; then
+    lang="ru"
+else
+    lang="en"
+fi
+
+function msg() {
+    case $lang in
+        en) echo "$1" ;;
+        ru) echo "$2" ;;
+    esac
+}
+
+msg "Installing necessary packages..." "Установка необходимых пакетов..."
+pkg install x11-repo root-repo -y &>/dev/null
+pkg install xfce4 xwayland wget dialog -y &>/dev/null
+
+PRIVATE_TOKEN="glpat-6LE7R9PQ7zb6zsx4x3be"
+PROJECT_ID="64704412"
+
+mkdir -p "$PREFIX/boxwine/components"
+
+wget --header "PRIVATE-TOKEN: $PRIVATE_TOKEN" \
+"https://gitlab.com/api/v4/projects/$PROJECT_ID/repository/files/wine-9.3-vanilla-wow64/raw?ref=main" -O "$PREFIX/boxwine/components/wine" &>/dev/null
+
+wget --header "PRIVATE-TOKEN: $PRIVATE_TOKEN" \
+"https://gitlab.com/api/v4/projects/$PROJECT_ID/repository/files/dxvk/raw?ref=main" -O "$PREFIX/boxwine/components/dxvk" &>/dev/null
+
+chmod +x "$PREFIX/boxwine/components/wine"
+chmod +x "$PREFIX/boxwine/components/dxvk"
+
+cat <<EOF > "$PREFIX/bin/boxwine"
+#!/bin/bash
+DISPLAY=:1 xfce4-session &
+sleep 2
+while true; do
+    OPTION=\$(dialog --clear --stdout --title "BoxWine" \
+    --menu "Select an option and click OK / Выберите опцию и нажмите OK" 15 50 6 \
+    1 "Start Wine" \
+    2 "Settings" \
+    3 "Manage Packages" \
+    4 "Select Wine Container" \
+    5 "Switch DXVK Version" \
+    6 "Exit")
+    
+    case \$OPTION in
+        1) "$PREFIX/boxwine/components/wine" ;;
+        2) echo "No settings available yet." ;;
+        3) echo "Managing packages (not implemented)." ;;
+        4) echo "Selecting Wine container (default)." ;;
+        5) echo "Switching DXVK version (not implemented)." ;;
+        6) break ;;
+        *) break ;;
+    esac
+done
+EOF
+
+chmod +x "$PREFIX/bin/boxwine"
+
+msg "Installation complete! Type 'boxwine' to start." "Установка завершена! Введите 'boxwine' для запуска."
