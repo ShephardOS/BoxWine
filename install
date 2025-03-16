@@ -1,0 +1,118 @@
+#!/bin/bash
+
+echo "Select language / Выберите язык:"
+echo "1) English"
+echo "2) Русский"
+read -p "> " lang_choice
+
+if [ "$lang_choice" = "2" ]; then
+    LANG="ru"
+else
+    LANG="en"
+fi
+
+msg() {
+    case $1 in
+        initializing)
+            [ "$LANG" = "ru" ] && echo "Инициализация установки..." || echo "Initializing setup..."
+            ;;
+        install_termux_am)
+            [ "$LANG" = "ru" ] && echo "Установка termux-am" || echo "Installing termux-am"
+            ;;
+        storage_permission_denied)
+            [ "$LANG" = "ru" ] && echo "Доступ к хранилищу отклонён" || echo "Storage permission denied"
+            ;;
+        install_packages)
+            [ "$LANG" = "ru" ] && echo "Установка пакетов Termux..." || echo "Installing termux packages..."
+            ;;
+        remove_glibc)
+            [ "$LANG" = "ru" ] && echo -n "Удалить предыдущую glibc? (Y/n) " || echo -n "Removing previous glibc. Continue? (Y/n) "
+            ;;
+        setting_up_package_manager)
+            [ "$LANG" = "ru" ] && echo "Настройка пакетного менеджера BoxWine..." || echo "Setting up BoxWine package manager..."
+            ;;
+        updating_package_manager)
+            [ "$LANG" = "ru" ] && echo "Обновление пакетного менеджера..." || echo "Updating package manager..."
+            ;;
+        download_failed)
+            [ "$LANG" = "ru" ] && echo "Скачивание не удалось" || echo "Download failed"
+            ;;
+        start_message)
+            [ "$LANG" = "ru" ] && echo "Для запуска введите \"boxwine\"" || echo "To start - type \"boxwine\""
+            ;;
+    esac
+}
+
+rm ~/x
+clear
+
+msg initializing
+
+msg install_termux_am
+pkg install termux-am -y &>/dev/null
+yes | pkg install wget
+clear
+termux-setup-storage & sleep 4 &>/dev/null
+
+while true; do
+    if [ -d ~/storage/shared ]; then
+        break
+    else
+        msg storage_permission_denied
+    fi
+    sleep 3
+done
+
+msg install_packages
+apt-get clean
+apt-get update >/dev/null 2>&1
+apt-get -y --with-new-pkgs -o Dpkg::Options::="--force-confdef" upgrade >/dev/null 2>&1
+pkg install x11-repo -y &>/dev/null
+pkg install pulseaudio -y &>/dev/null
+pkg install xwayland -y &>/dev/null
+pkg install wget -y &>/dev/null
+pkg install tsu -y &>/dev/null
+pkg install root-repo -y &>/dev/null
+pkg install patchelf -y &>/dev/null
+pkg install p7zip -y &>/dev/null
+pkg install xorg-xrandr -y &>/dev/null
+pkg install ncurses-utils -y &>/dev/null
+pkg install hashdeep -y &>/dev/null
+pkg install termux-x11-nightly -y &>/dev/null
+
+if [ -e $PREFIX/glibc ]; then
+    msg remove_glibc
+    read i
+    if [ "$i" = "Y" ] || [ "$i" = "y" ]; then
+        rm -rf $PREFIX/glibc
+    else
+        return 1
+    fi
+fi
+
+msg setting_up_package_manager
+
+function wget-git-q {
+    wget -q --retry-connrefused --tries=0 --header "PRIVATE-TOKEN: $PRIVATE_TOKEN" "https://gitlab.com/api/v4/projects/$PROJECT_ID/repository/files/$1/raw?ref=main" -O $2
+    return $?
+}
+
+msg updating_package_manager
+mkdir -p $PREFIX/glibc/opt/package-manager/installed
+
+echo "PRIVATE_TOKEN=glpat-9fxsdQ4Fub14JU8xMUot
+PROJECT_ID=67947913" > $PREFIX/glibc/opt/package-manager/token
+
+. $PREFIX/glibc/opt/package-manager/token
+if ! wget-git-q "package-manager" "$PREFIX/glibc/opt/package-manager/package-manager"; then
+    msg download_failed
+    return 1
+fi
+
+. $PREFIX/glibc/opt/package-manager/package-manager
+sync-all
+
+sync-package wine-9.3-vanilla-wow64
+
+ln -sf $PREFIX/glibc/opt/scripts/boxwine $PREFIX/bin/boxwine
+msg start_message
