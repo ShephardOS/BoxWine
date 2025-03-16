@@ -1,0 +1,103 @@
+#!/bin/bash
+
+rm -f ~/x
+
+echo "BoxWine made by ShephardOS"
+echo ""
+
+echo "Select installation language / Выберите язык установки:"
+echo "1) English"
+echo "2) Русский"
+read -p "Choice / Выбор: " lang_choice
+
+if [ "$lang_choice" == "2" ]; then
+    lang="ru"
+else
+    lang="en"
+fi
+
+function msg() {
+    case $lang in
+        en) echo "$1" ;;
+        ru) echo "$2" ;;
+    esac
+}
+
+msg "Starting BoxWine setup..." "Запуск установки BoxWine..."
+
+pkg install termux-am -y &>/dev/null
+yes | pkg install wget &>/dev/null
+clear
+termux-setup-storage & sleep 4 &>/dev/null
+
+while true; do
+    if [ -d ~/storage/shared ]; then
+        break
+    else
+        msg "Storage permission denied. Grant permission and try again." "Доступ к хранилищу отклонён. Предоставьте доступ и попробуйте снова."
+    fi
+    sleep 3
+done
+
+msg "Installing necessary packages..." "Установка необходимых пакетов..."
+apt-get clean
+apt-get update >/dev/null 2>&1
+apt-get -y --with-new-pkgs -o Dpkg::Options::="--force-confdef" upgrade >/dev/null 2>&1
+
+packages=(
+    x11-repo pulseaudio xwayland wget tsu root-repo patchelf 
+    p7zip xorg-xrandr ncurses-utils hashdeep termux-x11-nightly 
+    xfce4 xfce4-terminal tigervnc
+)
+
+for pkg in "${packages[@]}"; do
+    pkg install "$pkg" -y &>/dev/null
+done
+
+if [ -e "$PREFIX/glibc" ]; then
+    msg "Previous glibc installation detected. Remove it? (Y/n)" "Обнаружена предыдущая установка glibc. Удалить? (Y/n)"
+    read i
+    if [ "$i" = "Y" ] || [ "$i" = "y" ]; then
+        rm -rf "$PREFIX/glibc"
+    else
+        return 1
+    fi
+fi
+
+msg "Installing exscord..." "Установка exscord..."
+
+function wget-git-q {
+    wget -q --retry-connrefused --tries=0 --header "PRIVATE-TOKEN: $PRIVATE_TOKEN" "https://gitlab.com/api/v4/projects/$PROJECT_ID/repository/files/$1/raw?ref=main" -O "$2"
+    return $?
+}
+
+mkdir -p "$PREFIX/glibc/opt/package-manager/installed"
+
+cat <<EOF > "$PREFIX/glibc/opt/package-manager/token"
+PRIVATE_TOKEN=glpat-6LE7R9PQ7zb6zsx4x3be
+PROJECT_ID=64704412
+EOF
+
+. "$PREFIX/glibc/opt/package-manager/token"
+
+if ! wget-git-q "package-manager" "$PREFIX/glibc/opt/package-manager/package-manager"; then
+    msg "Download failed" "Загрузка не удалась"
+    return 1
+fi
+
+. "$PREFIX/glibc/opt/package-manager/package-manager"
+sync-all
+
+sync-package wine-9.3-vanilla-wow64
+
+cat <<EOF > "$PREFIX/bin/exscord"
+#!/bin/bash
+export DISPLAY=:0
+termux-x11 :0 &
+sleep 2
+xfce4-session
+EOF
+
+chmod +x "$PREFIX/bin/exscord"
+
+msg "Installation complete! To start, type 'exscord'" "Установка завершена! Для запуска введите 'exscord'"
