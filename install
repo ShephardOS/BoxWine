@@ -1,0 +1,86 @@
+#!/bin/bash
+
+rm -f ~/x
+
+echo "1) English"
+echo "2) Русский"
+read -p "> " lang_choice
+
+if [ "$lang_choice" == "2" ]; then
+    lang="ru"
+else
+    lang="en"
+fi
+
+function msg() {
+    case $lang in
+        en) echo "$1" ;;
+        ru) echo "$2" ;;
+    esac
+}
+
+pkg install termux-am -y &>/dev/null
+termux-setup-storage & sleep 4 &>/dev/null
+
+while true; do
+    if [ -d ~/storage/shared ]; then
+        break
+    else
+        msg "Storage permission denied" "Доступ к хранилищу отклонён"
+    fi
+    sleep 3
+done
+
+pkg install x11-repo pulseaudio xwayland wget tsu root-repo patchelf p7zip xorg-xrandr ncurses-utils hashdeep termux-x11-nightly -y &>/dev/null
+
+if [ -e "$PREFIX/glibc" ]; then
+    msg "Remove previous glibc? (Y/n)" "Удалить предыдущую glibc? (Y/n)"
+    read i
+    if [ "$i" = "Y" ] || [ "$i" = "y" ]; then
+        rm -rf "$PREFIX/glibc"
+    else
+        exit 1
+    fi
+fi
+
+mkdir -p "$PREFIX/glibc/opt/package-manager/installed"
+
+cat <<EOF > "$PREFIX/glibc/opt/package-manager/token"
+PRIVATE_TOKEN=glpat-6LE7R9PQ7zb6zsx4x3be
+PROJECT_ID=67947913
+EOF
+
+function wget-git {
+    wget --retry-connrefused --tries=0 --header "PRIVATE-TOKEN: $PRIVATE_TOKEN" \
+    "https://gitlab.com/api/v4/projects/$PROJECT_ID/repository/files/$1/raw?ref=main" -O "$2"
+}
+
+. "$PREFIX/glibc/opt/package-manager/token"
+
+wget-git "package-manager" "$PREFIX/glibc/opt/package-manager/package-manager"
+
+. "$PREFIX/glibc/opt/package-manager/package-manager"
+sync-all
+sync-package wine-9.3-vanilla-wow64
+
+ln -sf "$PREFIX/glibc/opt/scripts/boxwine" "$PREFIX/bin/boxwine"
+
+function show_menu() {
+    while true; do
+        clear
+        msg "BoxWine Menu" "Меню BoxWine"
+        echo "1) Start BoxWine / Запуск BoxWine"
+        echo "2) Update Wine / Обновить Wine"
+        echo "3) Exit / Выход"
+        read -p "> " choice
+        case $choice in
+            1) boxwine ;;
+            2) sync-package wine-9.3-vanilla-wow64 ;;
+            3) exit 0 ;;
+            *) msg "Invalid option" "Неверный выбор" ;;
+        esac
+        read -p "$(msg 'Press Enter to continue...' 'Нажмите Enter для продолжения...')" 
+    done
+}
+
+show_menu
