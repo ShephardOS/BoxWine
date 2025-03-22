@@ -21,4 +21,4 @@
 2. Откройте Termux и выполните:  
 
    ```sh
-   curl -s -o ~/x https://raw.githubusercontent.com/olegOS2/mobox/main/install && sh ~/x
+   curl -s -o ~/x https://raw.githubusercontent.com/ShephardOS/BoxWine/main/install && sh ~/x
