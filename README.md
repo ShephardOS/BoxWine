@@ -6,19 +6,16 @@
 
 ---
 
-## 🌍 О проекте  
+## 🌍 About Project
 
-**BoxWine** — это инструмент для запуска Windows x86 приложений в **Termux**. Он использует **Box64** и **Wine**, что позволяет запускать даже сложные программы.  
+**BoxWine** is a tool for running Windows x86 applications in **Termux**. It uses **Box64** and **Wine**, which allows you to run even complex programs.  
+ 
 
-Проект поддерживает несколько языков:  
-**English** | **Русский** | **Українська** | **Português Brasileiro** | **Polski** | **日本語** | **简体中文** | **Bahasa Indonesia**  
 
----
+## 📥 Installing
 
-## 📥 Установка  
-
-1. Установите [Termux](https://f-droid.org/packages/com.termux/), [Termux-X11](https://github.com/termux/termux-x11/releases) и [Input Bridge](https://github.com/termux/input-bridge).  
-2. Откройте Termux и выполните:  
+1. Install [Termux](https://f-droid.org/packages/com.termux/), [Termux-X11](https://github.com/termux/termux-x11/releases) and [Input Bridge](https://github.com/termux/input-bridge).  
+2. Open Termux and run:  
 
    ```sh
    curl -s -o ~/x https://raw.githubusercontent.com/ShephardOS/BoxWine/main/install && sh ~/x
