@@ -20,6 +20,7 @@
    ```sh
    curl -s -o ~/x https://raw.githubusercontent.com/ShephardOS/BoxWine/main/install && sh ~/x
 
+
    ## Controls
 For touch controls Input Bridge app is required
 ## Uninstall
