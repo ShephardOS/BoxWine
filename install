@@ -1,0 +1,95 @@
+#!/bin/bash
+
+rm ~/temp
+
+pkg install termux-am -y &>/dev/null
+
+termux-setup-storage & sleep 4 &>/dev/null
+
+while true; do
+    if [ -d ~/storage/shared ]; then
+        break
+    else
+        echo "Storage permission denied"
+    fi
+    sleep 3
+done
+
+apt-get clean
+apt-get update >/dev/null 2>&1
+apt-get -y --with-new-pkgs -o Dpkg::Options::="--force-confdef" upgrade >/dev/null 2>&1
+pkg install x11-repo -y &>/dev/null
+pkg install pulseaudio -y &>/dev/null
+pkg install xwayland -y &>/dev/null
+pkg install wget -y &>/dev/null
+pkg install tsu -y &>/dev/null
+pkg install root-repo -y &>/dev/null
+pkg install patchelf -y &>/dev/null
+pkg install p7zip -y &>/dev/null
+pkg install xorg-xrandr -y &>/dev/null
+pkg install ncurses-utils -y &>/dev/null
+pkg install hashdeep -y &>/dev/null
+pkg install termux-x11-nightly -y &>/dev/null
+
+if [ -e $PREFIX/glibc ]; then
+    echo -n "Previous glibc found. Remove and continue? (Y/n) "
+    read choice
+    if [ "$choice" = "Y" ] || [ "$choice" = "y" ]; then
+        rm -rf $PREFIX/glibc
+    else
+        return 1
+    fi
+fi
+
+USE_WOW64=0
+
+echo "Select the installation type"
+echo "1) Install BoxWine with box86 support"
+echo "2) Install BoxWine with full WOW64 support"
+echo ""
+echo -n "Enter your choice: "
+read choice
+case "$choice" in
+1)
+    USE_WOW64=0
+;;
+2)
+    USE_WOW64=1
+;;
+*)
+    return 1
+;;
+esac
+
+echo "Installing BoxWine"
+
+function wget-git-q {
+    wget -q --retry-connrefused --tries=0 "https://gitlab.com/api/v4/projects/$PROJECT_ID/repository/files/$1/raw?ref=main" -O $2
+    return $?
+}
+
+echo "Updating package manager"
+mkdir -p $PREFIX/glibc/opt/package-manager/installed
+
+if [ "$USE_WOW64" = "1" ]; then
+echo "PROJECT_ID=54240888">$PREFIX/glibc/opt/package-manager/token
+else
+echo "PROJECT_ID=52465323">$PREFIX/glibc/opt/package-manager/token
+fi
+
+. $PREFIX/glibc/opt/package-manager/token
+if ! wget-git-q "package-manager" "$PREFIX/glibc/opt/package-manager/package-manager"; then
+    echo "Download failed. Exiting."
+    return 1
+fi
+. $PREFIX/glibc/opt/package-manager/package-manager
+sync-all
+
+if [ "$USE_WOW64" = "1" ]; then
+sync-package wine-9.3-vanilla-wow64
+else
+sync-package wine-ge-custom-8-25
+fi
+
+ln -sf $PREFIX/glibc/opt/scripts/boxwine $PREFIX/bin/boxwine
+echo "Installation complete. To run, type \"boxwine\""
