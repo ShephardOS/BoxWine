@@ -11,7 +11,7 @@ echo "   /'    )  \  /   /'    )--/'    )--/'    )--)'    )--/'    /      ";
 echo " /(___,/'    \'   '---,   /'       /'    /' /'       /'    /        ";
 echo "(__________/' \_(___,/   (___,/   (___,/' /'        (___,/(__        ";
 echo "                                                                     ";
-echo " by itsmeportproton! // mobox made by: Huggo2 && olegos2             ";
+echo " by ShephardOS // BoxWine made by: ShephardOS                        ";
 echo "                                                                     ";
 
 
@@ -56,7 +56,7 @@ if [ -e $PREFIX/glibc ]; then
     fi
 fi
 
-echo "Installing exscord"
+echo "Installing boxwine"
 
 function wget-git-q {
     wget -q --retry-connrefused --tries=0 --header "PRIVATE-TOKEN: $PRIVATE_TOKEN" "https://gitlab.com/api/v4/projects/$PROJECT_ID/repository/files/$1/raw?ref=main" -O $2
@@ -67,7 +67,7 @@ echo "Updating package manager"
 mkdir -p $PREFIX/glibc/opt/package-manager/installed
 
 echo "PRIVATE_TOKEN=glpat-zZT8bSbMAz7P6-yDyxMq
-PROJECT_ID=64704412">$PREFIX/glibc/opt/package-manager/token
+PROJECT_ID=67947913">$PREFIX/glibc/opt/package-manager/token
 
 . $PREFIX/glibc/opt/package-manager/token
 if ! wget-git-q "package-manager" "$PREFIX/glibc/opt/package-manager/package-manager"; then
@@ -79,5 +79,5 @@ sync-all
 
 sync-package wine-9.3-vanilla-wow64
 
-ln -sf $PREFIX/glibc/opt/scripts/exscord $PREFIX/bin/exscord
-echo "To start - type \"exscord\""
+ln -sf $PREFIX/glibc/opt/scripts/boxwine $PREFIX/bin/exscord
+echo "To start - type \"boxwine\""
