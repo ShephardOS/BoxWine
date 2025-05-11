@@ -45,14 +45,14 @@ fi
 INSTALL_WOW64=0
 
 echo "Select an option"
-echo "1) Install boxvidra with box86 build (6 June)"
-echo "2) Install boxvidra with wow64 build (Complete version)"
+echo "1) Install boxwine with box86 build (6 June)"
+echo "2) Install boxwine with wow64 build (Complete version)"
 echo ""
 echo -n "Selected number: "
 read i
 case "$i" in
 1)
-    echo -e "\e[36m[+] Installing Boxvidra Box86 build\e[0m"
+    echo -e "\e[36m[+] Installing BoxWine Box86 build\e[0m"
     wget -q --show-progress -O /data/data/com.termux/files/usr/glibc.box86.tar.xz https://github.com/AGENT404TRD/BOXVIDRA-EMULATOR/releases/download/Glibc/glibc.box86.tar.xz
     sleep 2
     echo -e "\e[33m[i] Extracting Box86 build glibc...\e[0m"
@@ -64,20 +64,20 @@ case "$i" in
     chmod 777 /data/data/com.termux/files/usr/bin/boxvidra
     rm /data/data/com.termux/files/usr/glibc.box86.tar.xz
     echo -e "\n"
-    echo -e "\e[32m[âœ“] Boxvidra Box86 build Installed Successfully.\e[0m"
+    echo -e "\e[32m[âœ“] BoxWine Box86 build Installed Successfully.\e[0m"
     ;;
 2)
-    echo -e "\e[36m[+] Installing Boxvidra Wow64 build\e[0m"
+    echo -e "\e[36m[+] Installing BoxWine Wow64 build\e[0m"
     wget -q --show-progress -O /data/data/com.termux/files/usr/glibc.wow64.tar.xz https://github.com/AGENT404TRD/BOXVIDRA-EMULATOR/releases/download/Glibc/glibc.wow64.tar.xz
     sleep 2
     echo -e "\e[33m[i] Extracting Wow64 build glibc...\e[0m"
     tar -xf /data/data/com.termux/files/usr/glibc.wow64.tar.xz -C /data/data/com.termux/files/usr/
-    cp /data/data/com.termux/files/usr/glibc/opt/scripts/boxvidra /data/data/com.termux/files/usr/bin
+    cp /data/data/com.termux/files/usr/glibc/opt/scripts/boxwine /data/data/com.termux/files/usr/bin
     chmod +x /data/data/com.termux/files/usr/glibc/opt/scripts/*
-    chmod 777 /data/data/com.termux/files/usr/bin/boxvidra
+    chmod 777 /data/data/com.termux/files/usr/bin/boxwine
     rm /data/data/com.termux/files/usr/glibc.wow64.tar.xz
     echo -e "\n"
-    echo -e "\e[32m[âœ“] Boxvidra Wow64 build Installed Successfully.\e[0m"
+    echo -e "\e[32m[âœ“] BoxWine Wow64 build Installed Successfully.\e[0m"
     ;;
 *)
     return 1
@@ -103,7 +103,7 @@ pkg install termux-x11-nightly -y &>/dev/null
 echo -e "\e[32m[âœ“] Termux X11 Packages Installed Successfully.\e[0m"
 echo -e "\n"
 
-echo -e "\e[36m[+] Installing Boxvidra Emulator Packages...\e[0m"
+echo -e "\e[36m[+] Installing BoxWine Emulator Packages...\e[0m"
 pkg install tur-repo -y &>/dev/null
 pkg install xwayland -y &>/dev/null
 pkg install xorg-xrandr -y &>/dev/null
@@ -114,7 +114,7 @@ pkg install hashdeep -y &>/dev/null
 pkg install mesa-zink virglrenderer-mesa-zink vulkan-loader-android virglrenderer-android -y &>/dev/null
 apt install android-tools -y &>/dev/null
 pkg install python-tkinter -y &>/dev/null
-echo -e "\e[32m[âœ“] Boxvidra Emulator Packages Installed Successfully.\e[0m"
+echo -e "\e[32m[âœ“] BoxWine Emulator Packages Installed Successfully.\e[0m"
 echo -e "\n"
 sleep 3
 clear
@@ -132,7 +132,7 @@ echo -e "\n"
 sleep 3
 clear
 
-echo -e "\e[36m[+] Installing Boxvidra Emulator Programs, Browsers, Etc..\e[0m"
+echo -e "\e[36m[+] Installing BoxWine Emulator Programs, Browsers, Etc..\e[0m"
 echo -e "\n"
 pkg install gimp -y
 pkg install mpv -y
@@ -142,7 +142,7 @@ pkg install vlc-qt -y
 pkg install abiword -y
 apt install ristretto -y
 echo -e "\n"
-echo -e "\e[32m[âœ“] Boxvidra Emulator Programs, Browsers, Other Applications Installed Successfully.\e[0m"
+echo -e "\e[32m[âœ“] BoxWine Emulator Programs, Browsers, Other Applications Installed Successfully.\e[0m"
 clear
 sleep 3
 
@@ -265,9 +265,9 @@ esac
 clear
 sleep 2
 
-echo -e "\e[32m[âœ“] Boxvidra Emulator Installed Successfully.\e[0m"
+echo -e "\e[32m[âœ“] BoxWine Emulator Installed Successfully.\e[0m"
 echo -e "\n"
-echo "Type \"boxvidra\" To Start"
+echo "Type \"boxwine\" To Start"
 
 
 
