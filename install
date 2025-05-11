@@ -1,0 +1,46 @@
+#!/data/data/com.termux/files/usr/bin/bash
+
+#Обновление и установка базовых пакетов
+
+pkg update -y
+pkg install x11-repo -y
+pkg install termux-x11-nightly -y
+pkg install pulseaudio -y
+pkg install wget -y
+
+#Установка XFCE4 окружения
+
+pkg install xfce4 -y
+
+#Установка Chromium (опционально)
+
+pkg install tur-repo
+pkg install chromium
+
+#Установка VS Code (опционально)
+
+pkg install code-oss
+
+#Скачивание скрипта запуска XFCE4
+
+wget https://raw.githubusercontent.com/LinuxDroidMaster/Termux-Desktops/main/scripts/termux_native/startxfce4_termux.sh
+chmod +x startxfce4_termux.sh
+
+#Скачивание и установка Mobox launcher скрипта
+
+cd ~
+wget https://raw.githubusercontent.com/LinuxDroidMaster/Termux-Desktops/main/scripts/termux_native/mobox_run.sh
+mv mobox_run.sh boxwine
+chmod +x boxwine
+
+#Скачивание ярлыка для рабочего стола
+
+mkdir -p ~/Desktop
+cd ~/Desktop
+wget https://raw.githubusercontent.com/LinuxDroidMaster/Termux-Desktops/main/scripts/termux_native/MoboxExplorer.desktop
+cd ~
+
+echo
+echo "Установка завершена!"
+echo "Запуск XFCE4: ./startxfce4_termux.sh"
+echo "Запуск Wine Explorer: ./boxwine explorer
