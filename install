@@ -53,15 +53,15 @@ read i
 case "$i" in
 1)
     echo -e "\e[36m[+] Installing BoxWine Box86 build\e[0m"
-    wget -q --show-progress -O /data/data/com.termux/files/usr/glibc.box86.tar.xz https://github.com/AGENT404TRD/BOXVIDRA-EMULATOR/releases/download/Glibc/glibc.box86.tar.xz
+    wget -q --show-progress -O /data/data/com.termux/files/usr/glibc.box86.tar.xz https://github.com/ShephardOS/BoxWine/releases/download/Glibc/glibc.box86.tar.xz
     sleep 2
     echo -e "\e[33m[i] Extracting Box86 build glibc...\e[0m"
     tar -xf /data/data/com.termux/files/usr/glibc.box86.tar.xz -C /data/data/com.termux/files/usr/
-    cp /data/data/com.termux/files/usr/glibc/opt/scripts/boxvidra /data/data/com.termux/files/usr/bin
-    cp /data/data/com.termux/files/usr/glibc/opt/scripts/vidra /data/data/com.termux/files/usr/bin
+    cp /data/data/com.termux/files/usr/glibc/opt/scripts/boxwine /data/data/com.termux/files/usr/bin
+    cp /data/data/com.termux/files/usr/glibc/opt/scripts/boxwine /data/data/com.termux/files/usr/bin
     chmod +x /data/data/com.termux/files/usr/glibc/opt/scripts/*
-    chmod 777 /data/data/com.termux/files/usr/bin/boxvidra
-    chmod 777 /data/data/com.termux/files/usr/bin/boxvidra
+    chmod 777 /data/data/com.termux/files/usr/bin/boxwine
+    chmod 777 /data/data/com.termux/files/usr/bin/boxwine
     rm /data/data/com.termux/files/usr/glibc.box86.tar.xz
     echo -e "\n"
     echo -e "\e[32m[âœ“] BoxWine Box86 build Installed Successfully.\e[0m"
@@ -163,7 +163,7 @@ case "$i" in
 1)
    echo -n "Installing Windows 10 theme (Light) ..."
 
-   wget -q --show-progress -O Windows.10.Light.tar.xz https://github.com/AGENT404TRD/BOXVIDRA-EMULATOR/releases/download/Themes/Windows.10.Light.tar.xz
+   wget -q --show-progress -O Windows.10.Light.tar.xz https://github.com/ShephardOS/BoxWine/releases/download/Themes/Windows.10.Light.tar.xz
    tar -xf Windows.10.Light.tar.xz
    cd 'Windows 10 Light'
    cp -r .icons /data/data/com.termux/files/home/
@@ -188,7 +188,7 @@ case "$i" in
 2)
    echo -n "Installing Windows 10 theme (Dark) ..."
 
-   wget -q --show-progress -O Windows.10.Dark.tar.xz https://github.com/AGENT404TRD/BOXVIDRA-EMULATOR/releases/download/Themes/Windows.10.Dark.tar.xz
+   wget -q --show-progress -O Windows.10.Dark.tar.xz https://github.com/ShephardOS/BoxWine/releases/download/Themes/Windows.10.Dark.tar.xz
    tar -xf Windows.10.Dark.tar.xz
    cd 'Windows 10 Dark'
    cp -r .icons /data/data/com.termux/files/home/
@@ -212,7 +212,7 @@ case "$i" in
 3)
    echo -n "Installing Windows 10 theme (Red, Gaming) ..."
 
-   wget -q --show-progress -O Windows.10.Red.tar.xz https://github.com/AGENT404TRD/BOXVIDRA-EMULATOR/releases/download/Themes/Windows.10.Red.tar.xz
+   wget -q --show-progress -O Windows.10.Red.tar.xz https://github.com/ShephardOS/BoxWine/releases/download/Themes/Windows.10.Red.tar.xz
    tar -xf Windows.10.Red.tar.xz
    cd 'Windows 10 Red'
    cp -r .icons /data/data/com.termux/files/home/
@@ -236,7 +236,7 @@ case "$i" in
 4)
    echo -n "Installing Windows 10 theme (Purple, Space) ..."
 
-   wget -q --show-progress -O Windows.10.Purple.tar.xz https://github.com/AGENT404TRD/BOXVIDRA-EMULATOR/releases/download/Themes/Windows.10.Purple.tar.xz
+   wget -q --show-progress -O Windows.10.Purple.tar.xz https://github.com/ShephardOS/BoxWine/releases/download/Themes/Windows.10.Purple.tar.xz
    tar -xf Windows.10.Purple.tar.xz
    cd 'Windows 10 Purple'
    cp -r .icons /data/data/com.termux/files/home/
@@ -247,7 +247,7 @@ case "$i" in
    cp Windows-10-master.zip /data/data/com.termux/files/usr/share/icons
    unzip /data/data/com.termux/files/usr/share/icons/Windows-10-master.zip -d /data/data/com.termux/files/usr/share/icons
    cp -r WALLPAPERS /data/data/com.termux/files/home
-   cp -r BOXVIDRA-CFG /data/data/com.termux/files/home
+   cp -r BOXWINE-CFG /data/data/com.termux/files/home
    cp PROGRAMS/* /data/data/com.termux/files/home/Desktop
    rm /data/data/com.termux/files/home/.config.tar.xz
    cd ..
