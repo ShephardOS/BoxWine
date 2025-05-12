@@ -6,7 +6,7 @@ Usage: ${0##*/} [-hu] FILE [Args...]
 Exec
 
     -h          Display this help and exit
-    -u --update Update boxvidra before running
+    -u --update Update boxwine before running
 EOF
 }
 
