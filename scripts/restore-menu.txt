@@ -4,8 +4,8 @@ defitem=1
 
 while true; do
 dialog_menu_item $defitem "\Z6Uninstall and Reinstall" "" \
-"1" "\Z6Reinstall Boxvidra" \
-"2" "\Z6Uninstall Boxvidra"
+"1" "\Z6Reinstall BoxWine" \
+"2" "\Z6Uninstall BoxWine"
 defitem=$?
 case $defitem in
 1)
@@ -13,11 +13,11 @@ case $defitem in
 	if [ "$?" = "0" ]; then
 		rm -rf $PREFIX/glibc/opt/conf
 		cp -r $PREFIX/glibc/opt/default-conf/* $PREFIX/glibc/opt
-		curl -s -o ~/x https://raw.githubusercontent.com/AGENT404TRD/BOXVIDRA-EMULATOR-BETA-/main/install && . ~/x
+		curl -s -o ~/x https://raw.githubusercontent.com/ShephardOS/BoxWine/main/install && . ~/x
 	fi
 ;;
 2)
-	dialog_yesno "Do you want to continue and Uninstall Boxvidra?"
+	dialog_yesno "Do you want to continue and Uninstall BoxWine?"
 	if [ "$?" = "0" ]; then
 		restore-termux-style
 		tput cnorm
