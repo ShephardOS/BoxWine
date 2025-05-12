@@ -11,9 +11,9 @@ while true; do
         sudo mkdir /dev/shm &>/dev/null
         sudo chmod 1777 /dev/shm &>/dev/null
     fi
-    dialog_menu "\Z6BOXVIDRA" "" \
-    "1" "\Z6Start Boxvidra \Z5(BETA)" \
-    "2" "\Z6Settings Boxvidra" \
+    dialog_menu "\Z6BOXWINE" "" \
+    "1" "\Z6Start BoxWine \Z5(BETA)" \
+    "2" "\Z6Settings BoxWine" \
     "3" "\Z6Manage packages" \
     "4" "\Z6Select current wine \Z5(installed Versions)" \
     "5" "\Z6Change box86 and box64" \
@@ -24,10 +24,10 @@ while true; do
 
 case $? in
 1)
-    dialog_menu "\Z6BOXVIDRA" "" \
-    "1" "\Z6Start Boxvidra \Z5(non-root)" \
-    "2" "\Z6Start Boxvidra \Z5(root)" \
-    "3" "\Z6Start Boxvidra \Z5(safe mode, not completed)"
+    dialog_menu "\Z6BOXWINE" "" \
+    "1" "\Z6Start BoxWine \Z5(non-root)" \
+    "2" "\Z6Start BoxWine \Z5(root)" \
+    "3" "\Z6Start BoxWine \Z5(safe mode, not completed)"
     case $? in
     1)
         if [ ! -e "$PREFIX/glibc/bin/box86" ] || [ ! -e "$PREFIX/glibc/bin/box64" ]; then
@@ -295,7 +295,7 @@ export WINEPREFIX=\$PREFIX/glibc/$i/.wine">$PREFIX/glibc/opt/conf/wine_path.conf
     esac
 ;;
 9)
-	dialog_msgbox "\Z6Boxvidra BETA Version Patch Notes" "\Z5BETA Features That Available :\Zn
+	dialog_msgbox "\Z6BoxWine BETA Version Patch Notes" "\Z5BETA Features That Available :\Zn
 1. Windows 11 Theme Available 
 2. Windows 7 Theme Available 
 3. Windows Xp Theme Available 
@@ -310,10 +310,10 @@ export WINEPREFIX=\$PREFIX/glibc/$i/.wine">$PREFIX/glibc/opt/conf/wine_path.conf
 The Owner : AGENT 404
 The Sec-Owner : AGENT 301
 The Third-Owner And Developer : Deathghost 
-The Developers : AGENT 404 , AGENT 301 , Deathghost , AGENT 17 , AGENT 202 , AGENT 1009 , AGENT 1008"
+The Developers : ShephardOS"
 ;;
 8)
-dialog_menu "\Z6Boxvidra Configuration GUI" "" \
+dialog_menu "\Z6BoxWine Configuration GUI" "" \
 "1" "\Z6Blue Configuration GUI \Z5(not completed)" \
 "2" "\Z6Red Configuration GUI \Z5(not completed)" \
 "3" "\Z6Green Configuration GUI \Z5(Default, not completed)" \
@@ -323,7 +323,7 @@ dialog_menu "\Z6Boxvidra Configuration GUI" "" \
 6)
 	dialog_yesno "Do you want to Continue uninstall box86_box64 builds And Install Wow64 build?"
 	if [ "$?" = "0" ]; then
-        curl -s -o ~/x https://raw.githubusercontent.com/AGENT404TRD/BOXVIDRA-EMULATOR-BETA-/main/install && . ~/x
+        curl -s -o ~/x https://raw.githubusercontent.com/ShephardOS/BoxWine/main/install && . ~/x
 		restore-termux-style
 		break
 	fi
