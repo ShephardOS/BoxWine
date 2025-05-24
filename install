@@ -1,0 +1,81 @@
+#!/data/data/com.termux/files/usr/bin/bash
+
+set -e
+
+# Установка базовых пакетов
+pkg update -y && pkg upgrade -y
+
+pkg install -y x11-repo
+pkg install -y termux-x11-nightly
+pkg install -y pulseaudio
+pkg install -y xfce4
+pkg install -y tur-repo
+pkg install -y chromium
+pkg install -y code-oss
+pkg install -y wget tsu root-repo patchelf p7zip xorg-xrandr ncurses-utils hashdeep
+
+# Проверка на существующую glibc
+if [ -d "$PREFIX/glibc" ]; then
+    echo -n "Старая glibc найдена. Удалить? (Y/n): "
+    read answer
+    if [[ "$answer" =~ ^[Yy]$ ]]; then
+        rm -rf "$PREFIX/glibc"
+        echo "Старая glibc удалена."
+    else
+        echo "Прервано."
+        exit 1
+    fi
+fi
+
+# Выбор сборки
+echo
+echo "Выберите версию для установки:"
+echo "1) Box86 (32-bit)"
+echo "2) Wow64 (64-bit)"
+echo -n "Введите номер (1 или 2): "
+read choice
+
+if [ "$choice" == "2" ]; then
+    echo -e "\e[33m[i] Extracting Wow64 build glibc...\e[0m"
+    wget -q --show-progress -O /data/data/com.termux/files/usr/glibc.wow64.tar.xz https://github.com/ShephardOS/BoxWine/releases/download/Glibc/glibc.wow64.tar.xz
+    tar -xf /data/data/com.termux/files/usr/glibc.wow64.tar.xz -C /data/data/com.termux/files/usr/
+    cp /data/data/com.termux/files/usr/glibc/opt/scripts/boxwine /data/data/com.termux/files/usr/bin
+    cp /data/data/com.termux/files/usr/glibc/opt/scripts/boxwine /data/data/com.termux/files/usr/bin
+    chmod +x /data/data/com.termux/files/usr/glibc/opt/scripts/*
+    chmod 777 /data/data/com.termux/files/usr/bin/boxwine
+    chmod 777 /data/data/com.termux/files/usr/bin/boxwine
+    rm /data/data/com.termux/files/usr/glibc.wow64.tar.xz
+    echo -e "\n"
+    echo -e "\e[32m[✓] BoxWine Wow64 Installed.\e[0m"
+else
+    echo -e "\e[33m[i] Extracting Box86 build glibc...\e[0m"
+    wget -q --show-progress -O /data/data/com.termux/files/usr/glibc.box86.tar.xz https://github.com/ShephardOS/BoxWine/releases/download/Glibc/glibc.box86.tar.xz
+    tar -xf /data/data/com.termux/files/usr/glibc.box86.tar.xz -C /data/data/com.termux/files/usr/
+    cp /data/data/com.termux/files/usr/glibc/opt/scripts/boxwine /data/data/com.termux/files/usr/bin
+    cp /data/data/com.termux/files/usr/glibc/opt/scripts/boxwine /data/data/com.termux/files/usr/bin
+    chmod +x /data/data/com.termux/files/usr/glibc/opt/scripts/*
+    chmod 777 /data/data/com.termux/files/usr/bin/boxwine
+    chmod 777 /data/data/com.termux/files/usr/bin/boxwine
+    rm /data/data/com.termux/files/usr/glibc.box86.tar.xz
+    echo -e "\n"
+    echo -e "\e[32m[✓] BoxWine Box86 Installed.\e[0m"
+fi
+
+# Скачивание скриптов
+wget https://raw.githubusercontent.com/LinuxDroidMaster/Termux-Desktops/main/scripts/termux_native/startxfce4_termux.sh
+chmod +x startxfce4_termux.sh
+
+wget https://raw.githubusercontent.com/LinuxDroidMaster/Termux-Desktops/main/scripts/termux_native/mobox_run.sh
+chmod +x mobox_run.sh
+
+# Ярлык
+mkdir -p ~/Desktop
+cd ~/Desktop
+wget https://raw.githubusercontent.com/LinuxDroidMaster/Termux-Desktops/main/scripts/termux_native/MoboxExplorer.desktop
+cd ~
+
+# Финальное сообщение
+echo
+echo "Установка завершена!"
+echo "Запуск XFCE4: ./startxfce4_termux.sh"
+echo "Запуск WineExploler: ./mobox_run.sh"
