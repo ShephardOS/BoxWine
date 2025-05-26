@@ -74,7 +74,7 @@ echo "Updating package manager"
 mkdir -p $PREFIX/glibc/opt/package-manager/installed
 
 if [ "$INSTALL_WOW64" = "1" ]; then
-echo "PROJECT_ID=54240888">$PREFIX/glibc/opt/package-manager/token
+echo "PROJECT_ID=67374933">$PREFIX/glibc/opt/package-manager/token
 else
 echo "PROJECT_ID=52465323">$PREFIX/glibc/opt/package-manager/token
 fi
