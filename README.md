@@ -20,13 +20,13 @@
    ```sh
    curl -s -o ~/x https://raw.githubusercontent.com/ShephardOS/BoxWine/main/install && sh ~/x
 
-##controls
+## Controls
 
 For touch controls Input Bridge app is required
 ## Uninstall
-To uninstall mobox, use `Backup and restore` menu.
+To uninstall boxwine, use `Backup and restore` menu.
 ## Debugging
-To enable logging - select option 2 in boxwine -> Settings -> Debug settings menu. Path to the log is /sdcard/mobox_log.txt
+To enable logging - select option 2 in boxwine -> Settings -> Debug settings menu. Path to the log is /sdcard/boxwine_log.txt
 
 ## Support status
 ### Android
