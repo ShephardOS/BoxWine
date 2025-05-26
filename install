@@ -30,7 +30,7 @@ if [ "$choice" == "1" ]; then
     rm -f $INSTALL_DIR/glibc.box86.tar.xz
 
     echo "Downloading Box86 version..."
-    wget --show-progress https://github.com/ShephardOS/BoxWine/releases/download/latest/glibc.box86.tar.xz -O $INSTALL_DIR/glibc.box86.tar.xz
+    wget -q --show-progress https://github.com/ShephardOS/BoxWine/releases/download/latest/glibc.box86.tar.xz -O $INSTALL_DIR/glibc.box86.tar.xz
 
     echo "Installing to: $INSTALL_DIR"
     tar -xf $INSTALL_DIR/glibc.box86.tar.xz -C $INSTALL_DIR
@@ -41,7 +41,7 @@ elif [ "$choice" == "2" ]; then
     rm -f $INSTALL_DIR/glibc.wow64.tar.xz
 
     echo "Downloading WoW64 version..."
-    wget --show-progress https://github.com/ShephardOS/BoxWine/releases/download/latest/glibc.wow64.tar.xz -O $INSTALL_DIR/glibc.wow64.tar.xz
+    wget -q --show-progress https://github.com/ShephardOS/BoxWine/releases/download/latest/glibc.wow64.tar.xz -O $INSTALL_DIR/glibc.wow64.tar.xz
 
     echo "Installing to: $INSTALL_DIR"
     tar -xf $INSTALL_DIR/glibc.wow64.tar.xz -C $INSTALL_DIR
