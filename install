@@ -1,0 +1,71 @@
+#!bin/bash
+
+echo "Installing base packages..."
+pkg update -y
+pkg upgrade -y
+pkg install x11-repo -y
+pkg install pulseaudio -y
+pkg install alsa-utils -y
+pkg install xfce4 -y
+pkg install wget -y
+pkg install tar -y
+pkg install proot -y
+pkg install git -y
+pkg install p7zip -y
+
+termux-setup-storage
+
+INSTALL_DIR="/data/data/com.termux/files/usr"
+BIN_DIR="$INSTALL_DIR/bin"
+SCRIPT_DIR="$INSTALL_DIR/glibc/opt/scripts"
+
+echo ""
+echo "Select BoxWine version to install:"
+echo "1) Install BoxWine Box86 version"
+echo "2) Install BoxWine WoW64 version"
+read -p "Enter choice [1 or 2]: " choice
+
+if [ "$choice" == "1" ]; then
+    echo "Removing existing glibc.box86.tar.xz if present..."
+    rm -f $INSTALL_DIR/glibc.box86.tar.xz
+
+    echo "Downloading Box86 version..."
+    wget --show-progress https://github.com/ShephardOS/BoxWine/releases/download/latest/glibc.box86.tar.xz -O $INSTALL_DIR/glibc.box86.tar.xz
+
+    echo "Installing to: $INSTALL_DIR"
+    tar -xf $INSTALL_DIR/glibc.box86.tar.xz -C $INSTALL_DIR
+    rm $INSTALL_DIR/glibc.box86.tar.xz
+
+elif [ "$choice" == "2" ]; then
+    echo "Removing existing glibc.wow64.tar.xz if present..."
+    rm -f $INSTALL_DIR/glibc.wow64.tar.xz
+
+    echo "Downloading WoW64 version..."
+    wget --show-progress https://github.com/ShephardOS/BoxWine/releases/download/latest/glibc.wow64.tar.xz -O $INSTALL_DIR/glibc.wow64.tar.xz
+
+    echo "Installing to: $INSTALL_DIR"
+    tar -xf $INSTALL_DIR/glibc.wow64.tar.xz -C $INSTALL_DIR
+    rm $INSTALL_DIR/glibc.wow64.tar.xz
+
+else
+    echo "Invalid selection. Exiting."
+    exit 1
+fi
+
+echo "Installing scripts to $BIN_DIR..."
+cp $SCRIPT_DIR/boxwine $BIN_DIR
+cp $SCRIPT_DIR/boxwine_menu $BIN_DIR
+cp $SCRIPT_DIR/dxvk-settings $BIN_DIR
+cp $SCRIPT_DIR/dynarec-settings $BIN_DIR
+cp $SCRIPT_DIR/dynarec2-settings $BIN_DIR
+cp $SCRIPT_DIR/prefix-settings $BIN_DIR
+cp $SCRIPT_DIR/settings $BIN_DIR
+cp $SCRIPT_DIR/close-apps $BIN_DIR
+
+chmod +x $BIN_DIR/boxwine*
+chmod +x $BIN_DIR/*settings
+chmod +x $BIN_DIR/close-apps
+
+echo ""
+echo "Installation completed."
+echo "To run BoxWine, type: boxwine"
