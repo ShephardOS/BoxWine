@@ -1,20 +1,6 @@
 #!/bin/bash
-
-
-
-rm ~/x
-echo "                                                                     ";
-echo "                                                                   / ";
-echo "                                                                 /  ";
-echo "     ____  .    ,    ____     ____     ____     ____     _____,/    ";
-echo "   /'    )  \  /   /'    )--/'    )--/'    )--)'    )--/'    /      ";
-echo " /(___,/'    \'   '---,   /'       /'    /' /'       /'    /        ";
-echo "(__________/' \_(___,/   (___,/   (___,/' /'        (___,/(__        ";
-echo "                                                                     ";
-echo " by itsmeportproton! && Samuraidepo // mobox made by: Huggo2 && olegos2             ";
-echo "                                                                     ";
-
-
+rm ~/x                                                                                                                                                                                       ";
+echo "BoxWine created by ShephardOS"
 echo "Installing termux-am"
 pkg install termux-am -y &>/dev/null
 yes | pkg install wget; clear
@@ -56,7 +42,7 @@ if [ -e $PREFIX/glibc ]; then
     fi
 fi
 
-echo "Installing exscord"
+echo "Installing boxwine"
 
 function wget-git-q {
     wget -q --retry-connrefused --tries=0 --header "PRIVATE-TOKEN: $PRIVATE_TOKEN" "https://gitlab.com/api/v4/projects/$PROJECT_ID/repository/files/$1/raw?ref=main" -O $2
@@ -66,7 +52,7 @@ function wget-git-q {
 echo "Updating package manager"
 mkdir -p $PREFIX/glibc/opt/package-manager/installed
 
-echo "PRIVATE_TOKEN=glpat-6LE7R9PQ7zb6zsx4x3be
+echo "PRIVATE_TOKEN=glpat-j6YkZYnxz6Zw_yasX61p
 PROJECT_ID=64704412">$PREFIX/glibc/opt/package-manager/token
 
 . $PREFIX/glibc/opt/package-manager/token
@@ -79,5 +65,5 @@ sync-all
 
 sync-package wine-9.3-vanilla-wow64
 
-ln -sf $PREFIX/glibc/opt/scripts/exscord $PREFIX/bin/exscord
-echo "To start - type \"exscord\""
+ln -sf $PREFIX/glibc/opt/scripts/boxwine $PREFIX/bin/boxwine
+echo "To start - type \"boxwine\""
