@@ -1,5 +1,5 @@
 #!/bin/bash
-rm ~/x                                                                                                                                                                                       ";
+rm ~/x 
 echo "BoxWine created by ShephardOS"
 echo "Installing termux-am"
 pkg install termux-am -y &>/dev/null
