@@ -53,7 +53,7 @@ echo "Updating package manager"
 mkdir -p $PREFIX/glibc/opt/package-manager/installed
 
 echo "PRIVATE_TOKEN=glpat-j6YkZYnxz6Zw_yasX61p
-PROJECT_ID=64704412">$PREFIX/glibc/opt/package-manager/token
+PROJECT_ID=69335394">$PREFIX/glibc/opt/package-manager/token
 
 . $PREFIX/glibc/opt/package-manager/token
 if ! wget-git-q "package-manager" "$PREFIX/glibc/opt/package-manager/package-manager"; then
