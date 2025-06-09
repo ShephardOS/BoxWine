@@ -1,0 +1,72 @@
+#!/data/data/com.termux/files/usr/bin/bash
+
+# Обновление и установка базовых пакетов
+pkg update -y
+pkg install x11-repo -y
+pkg install termux-x11-nightly -y
+pkg install pulseaudio -y
+pkg install wget -y
+pkg install xfce4 -y
+pkg install tur-repo
+pkg install chromium
+pkg install code-oss
+
+# Выбор версии boxwine для установки
+echo "Select an option"
+echo "1) Install boxwine with box86 build (6 June)"
+echo "2) Install boxwine with wow64 build (Complete version)"
+echo ""
+echo -n "Selected number: "
+read i
+case "$i" in
+1)
+echo -e "\e[36m[+] Installing boxwine Box86 build\e[0m"
+wget -q --show-progress -O /data/data/com.termux/files/usr/glibc.box86.tar.xz https://github.com/ShephardOS/BoxWine/releases/download/Glibc/glibc.box86.tar.xz
+sleep 2
+echo -e "\e[33m[i] Extracting Box86 build glibc...\e[0m"
+tar -xf /data/data/com.termux/files/usr/glibc.box86.tar.xz -C /data/data/com.termux/files/usr/
+cp /data/data/com.termux/files/usr/glibc/opt/scripts/boxwine /data/data/com.termux/files/usr/bin
+chmod +x /data/data/com.termux/files/usr/glibc/opt/scripts/*
+chmod 777 /data/data/com.termux/files/usr/bin/boxwine
+rm /data/data/com.termux/files/usr/glibc.box86.tar.xz
+echo -e "\n"
+echo -e "\e[32m[✔] boxwine Box86 build Installed Successfully.\e[0m"
+;;
+2)
+echo -e "\e[36m[+] Installing boxwine Wow64 build\e[0m"
+wget -q --show-progress -O /data/data/com.termux/files/usr/glibc.wow64.tar.xz https://github.com/ShephardOS/BoxWine/releases/download/Glibc/glibc.wow64.tar.xz
+sleep 2
+echo -e "\e[33m[i] Extracting Wow64 build glibc...\e[0m"
+tar -xf /data/data/com.termux/files/usr/glibc.wow64.tar.xz -C /data/data/com.termux/files/usr/
+cp /data/data/com.termux/files/usr/glibc/opt/scripts/boxwine /data/data/com.termux/files/usr/bin
+chmod +x /data/data/com.termux/files/usr/glibc/opt/scripts/*
+chmod 777 /data/data/com.termux/files/usr/bin/boxwine
+rm /data/data/com.termux/files/usr/glibc.wow64.tar.xz
+echo -e "\n"
+echo -e "\e[32m[✔] boxwine Wow64 build Installed Successfully.\e[0m"
+;;
+*)
+echo "Invalid option selected."
+;;
+esac
+
+# Скачивание скрипта запуска XFCE4
+wget https://raw.githubusercontent.com/LinuxDroidMaster/Termux-Desktops/main/scripts/termux_native/startxfce4_termux.sh
+chmod +x startxfce4_termux.sh
+
+# Скачивание и установка Mobox launcher скрипта (boxwine)
+cd ~
+wget https://raw.githubusercontent.com/LinuxDroidMaster/Termux-Desktops/main/scripts/termux_native/mobox_run.sh
+mv mobox_run.sh boxwine
+chmod +x boxwine
+
+# Создание ярлыка для рабочего стола
+mkdir -p ~/Desktop
+cd ~/Desktop
+wget https://raw.githubusercontent.com/LinuxDroidMaster/Termux-Desktops/main/scripts/termux_native/MoboxExplorer.desktop
+cd ~
+
+echo
+echo "Installation complete!"
+echo "Start XFCE4: ./startxfce4_termux.sh"
+echo "Start Wine Explorer: ./boxwine explorer"
